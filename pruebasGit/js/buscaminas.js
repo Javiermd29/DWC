@@ -1,38 +1,19 @@
+let maxFilas = prompt('¿Cuántas filas quieres?');
+let maxColumnas = prompt('¿Cuántas columnas quieres?');
+let numMinas = prompt('¿Cuántas minas quieres introducir?');
 
-let maxFilas = prompt("Cuántas filas quieres?");
-let maxColumnas = prompt("Cuántas columnas quieres?");
-let numMinas = prompt("Cuántas minas quieres introducir?");
-
-
-// Creamos el tablero en html
-document.write('<table>');
-
-for (let i = 0; i < maxFilas; i++){
-    document.write('<tr>')
-
-    for (let j = 0; j <tr maxColumnas; j++) {
-        document.write('<td></td>');
-      }
-      document.write('</tr>');
-}
-document.write('</table>');
-
-//Arraid bideimenisonal para guardar las minas
-
+// Crear array bidimensional para guardar las minas
 let arrayTablero = [];
 let contadorMinas = 0;
 
-for( let fila = 0; fila < maxFilas; fila++){
-
+for (let fila = 0; fila < maxFilas; fila++) {
     arrayTablero[fila] = new Array(maxColumnas);
 
-    for(let columna = 0; columna < maxColumnas; columna++){
-
+    for (let columna = 0; columna < maxColumnas; columna++) {
         arrayTablero[fila][columna] = '';
-
     }
-
 }
+
 
 let posFila;
 let posColumna;
@@ -48,24 +29,48 @@ while (contadorMinas < numMinas) {
     };
   };
 
-let fila = 2;
-let columna = 1; 
-let numMinasAlrededor = 0;
 
-for (let cFila = fila - 1; cFila <= fila + 1; cFila++) {
-    for (let cColumna = columna - 1; cColumna < columna +1; cColumna++) {
-        if (cFila >= 0 || cColumna >= 0 || cFila < maxFilas || cColumna < maxColumnas) {
-            if (arrayTablero[cFila][cColumna] == 'MINA') {
-                numMinasAlrededor++;
+let numMinasAlrededor;
+
+for (let fila = 0; fila < maxFilas; fila++) {
+    for(let columna = 0; columna < maxColumnas; columna++) {
+        numMinasAlrededor= 0;
+        if(arrayTablero[fila][columna] != 'MINA'){
+            for (let cFila = fila - 1; cFila <= fila + 1; cFila++) {
+                if (cFila >= 0 && cFila < maxFilas ) {
+                    for(let cColumna =  columna - 1; cColumna <= columna + 1; cColumna++){
+                        if(cColumna >= 0 && cColumna < maxColumnas &&
+                            arrayTablero[cFila][cColumna] == 'MINA'){
+                                numMinasAlrededor++;
+                        }
+                    }
+                }
+                
+                arrayTablero[fila][columna] = numMinasAlrededor;
             }
-        } 
+        }
+        
     }
+    
 }
 
-arrayTablero[fila][columna] = numMinasAlrededor;
 
 console.log(arrayTablero);
 
+// Creamos el tablero en html
 
+
+document.write('<table>');
+
+for (let i = 0; i < maxFilas; i++) {
+    document.write('<tr>');
+
+    for (let j = 0; j < maxColumnas; j++) {
+        document.write('<td>' + arrayTablero[i][j] + '</td>');
+    }
+
+    document.write('</tr>');
+}
+document.write('</table>');
     
 
