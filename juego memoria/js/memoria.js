@@ -16,3 +16,16 @@ for (let i = 0; i < maxFilas; i++){
 }
 
 document.write('</table>');
+
+// Creamos el array
+
+for(let fila = 0; fila < maxFilas; fila++){
+    arrayTablero[fila] = new Array(maxColumnas);
+
+    for (let columna = 0; columna < maxColumnas; columna++) {
+        arrayTablero[fila][columna] = '';
+        
+    }
+}
+
+console.log(arrayTablero);
