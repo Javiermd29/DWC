@@ -13,25 +13,44 @@ while ((maxFilas * maxColumnas) % 2 != 0) {
 
 }
 
-// Creamos el array
-
 //Array de emoticonos
-
 let imagenes = ['&#9961;&#65039', '&#128566;&#8205;&#127787;&#65039', '&#128126',
-'&#128125', '&#128121', '&#128760', '&#127888', '&#129398', '&#129484', '&#128131'];
+    '&#128125', '&#128121', '&#128760', '&#127888', '&#129398', '&#128406', '&#128131'];
 
+let posFila;
+let posColumna;
+let contadorImagenes;
 
+// Creamos el array
 for (let fila = 0; fila < maxFilas; fila++) {
     arrayTablero[fila] = new Array(maxColumnas);
 
-    //Por cada pasada de este for, elige un objeto aleatorio del array de emoticonos
-    //y lo mete en el array
     for (let columna = 0; columna < maxColumnas; columna++) {
 
-        let random = imagenes[Math.floor(Math.random() * imagenes.length)]
-        arrayTablero[fila][columna] = random;
+        arrayTablero[fila][columna] = '';
 
     }
+
+}
+
+//Por cada pasada de este for, elige en orden un objeto del array de emoticonos
+//y lo mete en el array aleatoriamente
+for (let i = 0; i < maxFilas; i++) {
+
+    for (let j = 0; j < maxColumnas; j++) {
+
+        for (let x = 0; x < imagenes.length; x++) {
+
+            let posFila = Math.floor(Math.random() * maxFilas);
+            let posColumna = Math.floor(Math.random() * maxColumnas);
+
+            if (arrayTablero[posFila][posColumna] != imagenes[x]) {
+                arrayTablero[posFila][posColumna] = imagenes[x];
+            }
+        }
+    }
+
+
 }
 
 // Creamos y dibujamos el tablero con el array
