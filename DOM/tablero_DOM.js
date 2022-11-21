@@ -25,7 +25,6 @@ class Tablero {
         let tabla = document.createElement('table');
         let fila;
         let columna;
-        
 
         for (let i = 0; i < this.filas; i++) {
             fila = document.createElement('tr');
@@ -33,54 +32,13 @@ class Tablero {
 
             for (let j = 0; j < this.columnas; j++) {
                 columna = document.createElement('td');
-                columna.id = `f${i}_c${j}`;
-                columna.dataset.fila = i;
-                columna.dataset.columna = j;
                 fila.appendChild(columna);
-
-                columna.addEventListener('click', this.despejar);
-                columna.addEventListener('contextmenu', this.marcar);
-
                 columna.innerHTML = this.arrayTablero[i][j];
-
             }
 
+            document.write('</tr>');
         }
-
-        document.body.appendChild(tabla);      
-    }
-
-
-    despejar(){
-        let columna = this.dataset.columna;
-        let fila = this.dataset.fila;
-        alert(`Despejar celda ${fila}, ${columna}`);
-    }
-
-    marcar(){
-        document.oncontextmenu = function(){return false};
-
-        let id = document.getElementById(this.id);
-
-        switch(id.innerHTML){
-
-            case "&#128681":
-
-                id.innerHTML = "&#10067";
-                break;
-
-            case "&#10067":
-
-                id.innerHTML = "";
-                break;
-
-            default:
-
-                id.innerHTML = "&#128681";
-                break;
-            
-        }
-
+        document.write('</table>');
     }
 
     dibujarTableroHTML() {
@@ -173,7 +131,8 @@ class Buscaminas extends Tablero {
 window.onload = function(){
 
     let buscaminas1 = new Buscaminas(5, 5, 5);
-    //buscaminas1.colocarNumMinas();
+    buscaminas1.colocarNumMinas();
     buscaminas1.dibujarTableroDOM();
 
 }
+

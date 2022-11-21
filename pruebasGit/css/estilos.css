@@ -6,7 +6,6 @@ table{
 table,tr,td{         
     border: 2px solid rgb(255, 47, 182);
     border-collapse:collapse ;
-    background-color: rgb(252, 218, 234);
 
 }
 td {width: 50px;
