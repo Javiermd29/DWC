@@ -4,9 +4,8 @@ class Tablero {
         this.columnas = columnas;
 
         this.crearTablero();
-
     }
-    
+
     crearTablero() {
         // Crear array bidimensional para guardar las minas
         this.arrayTablero = [];
@@ -20,12 +19,27 @@ class Tablero {
         }
     }
 
-    dibujarTableroDOM() {
+    dibujarTableroHTML() {
         // Creamos el tablero en html
+        document.write('<table>');
+
+        for (let i = 0; i < this.filas; i++) {
+            document.write('<tr>');
+
+            for (let j = 0; j < this.columnas; j++) {
+                document.write(`<td></td>`);
+            }
+
+            document.write('</tr>');
+        }
+        document.write('</table>');
+    }
+
+    dibujarTableroDOM(){
+        // Creamos el tablero en DOM
         let tabla = document.createElement('table');
         let fila;
         let columna;
-        
 
         for (let i = 0; i < this.filas; i++) {
             fila = document.createElement('tr');
@@ -37,67 +51,14 @@ class Tablero {
                 columna.dataset.fila = i;
                 columna.dataset.columna = j;
                 fila.appendChild(columna);
-
-                columna.addEventListener('click', this.despejar);
-                columna.addEventListener('contextmenu', this.marcar);
-
-                columna.innerHTML = this.arrayTablero[i][j];
-
             }
-
         }
 
-        document.body.appendChild(tabla);      
+        document.body.appendChild(tabla);
     }
 
-
-    despejar(){
-        let columna = this.dataset.columna;
-        let fila = this.dataset.fila;
-        alert(`Despejar celda ${fila}, ${columna}`);
-    }
-
-    marcar(){
-        document.oncontextmenu = function(){return false};
-
-        let id = document.getElementById(this.id);
-
-        switch(id.innerHTML){
-
-            case "&#128681":
-
-                id.innerHTML = "&#10067";
-                break;
-
-            case "&#10067":
-
-                id.innerHTML = "";
-                break;
-
-            default:
-
-                id.innerHTML = "&#128681";
-                break;
-            
-        }
-
-    }
-
-    dibujarTableroHTML() {
-        // Creamos el tablero en html
-        document.write('<table>');
-
-        for (let i = 0; i < this.filas; i++) {
-            document.write('<tr>');
-
-            for (let j = 0; j < this.columnas; j++) {
-                document.write(`<td>${this.arrayTablero[i][j]}</td>`);
-            }
-
-            document.write('</tr>');
-        }
-        document.write('</table>');
-    }
+    
+    
 
     modificarFilas(nuevasFilas) {
         // Modificar el número de filas y volver a crear el tablero con las filas nuevas
@@ -122,6 +83,7 @@ class Buscaminas extends Tablero {
         this.numMinas = numMinas;
 
         this.colocarMinas();
+        this.colocarNumMinas();
     }
 
     colocarMinas() {
@@ -142,7 +104,6 @@ class Buscaminas extends Tablero {
     }
 
     colocarNumMinas() {
-
         let numMinasAlrededor;
 
         for (let fila = 0; fila < this.filas; fila++) {
@@ -158,22 +119,75 @@ class Buscaminas extends Tablero {
                                 }
                             }
                         }
-
                         this.arrayTablero[fila][columna] = numMinasAlrededor;
                     }
                 }
-
             }
+        }
+    }
 
+    dibujarTableroDOM(){
+        super.dibujarTableroDOM();
+
+        let celda;
+
+        for (let i = 0; i < this.filas; i++) {
+            for (let j = 0; j < this.columnas; j++){
+                celda = document.getElementById(`f${i}_c${j}`);
+
+                celda.addEventListener('click', this.despejar.bind(this));
+                celda.addEventListener('contextmenu', this.marcar.bind(this));
+            }
+        }
+    }
+
+    despejar(elEvento) {
+
+        let evento = elEvento || window.event;
+        let celda = evento.currentTarget;
+
+        let fila = celda.dataset.fila;
+        let columna = celda.dataset.columna;
+
+        let sitio = this.arrayTablero[fila][columna];
+
+        if(!isNaN(sitio)){
+            celda.innerHTML = sitio;
+        } else{
+            celda.innerHTML = sitio;
+            alert("has perdido");
         }
 
+        for (let i = 0; i < this.filas; i++) {
+            for (let j = 0; j < this.columnas; j++){
+                if(celda.innerHTML == "\uD83D\uDEA9"){
+                    if(this.arrayTablero[i][j] == "MINA"){
+                        alert(`Hay una mina en: f${i}_c${j}`);
+                    }
+                }
+            }
+        }
+
+        
+    };
+
+    marcar(elEvento) {
+        
+        let evento = elEvento || window.event;
+        let celda = evento.currentTarget;
+        
+        if (celda.innerHTML == "") {
+            celda.innerHTML = "\uD83D\uDEA9";
+        } else if (celda.innerHTML == "\uD83D\uDEA9") {
+            celda.innerHTML = "\u2754";
+        } else if(celda.innerHTML == "\u2754") {
+            celda.innerHTML = "";
+        };
+            
     }
 }
 
-window.onload = function(){
-
+window.onload = function() {
     let buscaminas1 = new Buscaminas(5, 5, 5);
-    //buscaminas1.colocarNumMinas();
     buscaminas1.dibujarTableroDOM();
-
 }
